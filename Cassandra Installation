@@ -1,0 +1,89 @@
+Cassandra instllation steps from: https://www.vultr.com/docs/how-to-install-apache-cassandra-3-11-x-on-centos-7
+
+Apache Cassandra is a free and open source NoSQL database management system that is designed to provide scalability, high availability, and uncompromised performance.
+
+In this article, I will guide you through installing the latest stable release of Apache Cassandra, Apache Cassandra 3.11.2, on a CentOS 7 server instance.
+
+Prerequisites
+A fresh Vultr CentOS 7 x64 server instance with at least 4GB of memory. Insufficient memory will cause Apache Cassandra to exit abnormally.
+A sudo user.
+The server instance has been updated to the latest stable status.
+Step 1: Install OpenJDK JRE 8
+Apache Cassandra requires the latest release of Java 8. For that you can choose to install the latest release of OpenJDK JRE 1.8 as below:
+
+sudo yum install -y java-1.8.0-openjdk
+Having OpenJDK JRE 1.8 installed, you can confirm the installation result:
+
+java -version
+The output will be similar to the following:
+
+openjdk version "1.8.0_161"
+OpenJDK Runtime Environment (build 1.8.0_161-b14)
+OpenJDK 64-Bit Server VM (build 25.161-b14, mixed mode)
+Optionally, you can create the JAVA_HOME environment variable as follows:
+
+echo "JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:bin/java::")" | sudo tee -a /etc/profile
+source /etc/profile
+echo $JAVA_HOME
+Step 2: Install Python 2.7, if it's missing on your system
+Apache Cassandra requires Python 2.7 rather than Python 3. If you operate Apache Cassandra in a Python 3 environment, you may have trouble launching the cqlsh shell of Apache Cassandra.
+
+First, determine the existence and version of Python on your machine:
+
+python -V
+On CentOS 7, the output normally will be:
+
+Python 2.7.5
+As you see, Python 2.7 is a built-in component on CentOS 7. However, if it's missing for some reason, you can install it by running the following command:
+
+sudo yum install python -y
+Step 3: Install the latest stable release of Apache Cassandra
+Create the Apache Cassandra 3.11.x YUM repo:
+
+cat <<EOF | sudo tee -a /etc/yum.repos.d/cassandra311x.repo
+[cassandra]
+name=Apache Cassandra
+baseurl=https://www.apache.org/dist/cassandra/redhat/311x/
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://www.apache.org/dist/cassandra/KEYS
+EOF
+Install Apache Cassandra 3.11.2 using the above YUM repo:
+
+sudo yum install cassandra -y
+sudo systemctl daemon-reload
+Step 4: Test the installation of Apache Cassandra
+Start the Apache Cassandra daemon:
+
+sudo service cassandra start
+The output will be:
+
+Starting cassandra (via systemctl):                        [  OK  ]
+If you want to make Apache Cassandra automatically start at system boot, run the following command:
+
+sudo chkconfig cassandra on
+Next, use the nodetool program to show the status of Apache Cassandra on current node:
+
+nodetool status
+The output will resemble the following:
+
+Datacenter: datacenter1
+=======================
+Status=Up/Down
+|/ State=Normal/Leaving/Joining/Moving
+--  Address    Load       Tokens       Owns (effective)  Host ID                               Rack
+UN  127.0.0.1  103.65 KiB  256          100.0%            e977023b-7dd7-4e89-9ee7-aaa4c45df51c  rack1
+You can use the cqlsh shell to interact with Apache Cassandra:
+
+cqlsh localhost
+The output will be similar to the following:
+
+Connected to Test Cluster at localhost:9042.
+[cqlsh 5.0.1 | Cassandra 3.11.2 | CQL spec 3.4.4 | Native protocol v4]
+Use HELP for help.
+cqlsh>
+For now, just type exit and then press ENTER to quit the cqlsh shell.
+
+If you want to stop Apache Cassandra, execute the following command:
+
+sudo service cassandra stop
