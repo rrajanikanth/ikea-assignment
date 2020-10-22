@@ -1,0 +1,21 @@
+curl -i http://127.0.0.1:5000/
+curl -i http://127.0.0.1:5000/api/v1/resources/inventory/all
+curl -i http://127.0.0.1:5000/api/v1/resources/products/all
+curl -i http://127.0.0.1:5000/api/v1/resources/product
+
+
+curl -i -H "Content-Type: application/json" -X PUT -d '{"products":[{"name":"Dining Chair","contain_articles":[{"art_id":"1","amount_of":"4"},{"art_id":"2","amount_of":"8"},{"art_id":"3","amount_of":"1"}]},{"name":"Dinning Table","contain_articles":[{"art_id":"1","amount_of":"4"},{"art_id":"2","amount_of":"8"},{"art_id":"4","amount_of":"1"}]}]}' http://127.0.0.1:5000/api/v1/resources/products/create
+
+curl -i -H "Content-Type: application/json" -X PUT -d '{"inventory":[{"art_id":"1","name":"leg","stock":"12"},{"art_id":"2","name":"screw","stock":"17"},{"art_id":"3","name":"seat","stock":"2"},{"art_id":"4","name":"table top","stock":"1"}]}' http://127.0.0.1:5000/api/v1/resources/inventory/create
+
+curl -i http://127.0.0.1:5000/api/v1/resources/products/all
+curl -i http://127.0.0.1:5000/api/v1/resources/inventory/all
+
+
+
+curl -i -H "Content-Type: application/json" -X POST -d '{"products":[{"name":"Dining Chair","contain_articles":[{"art_id":"1","amount_of":"40"},{"art_id":"2","amount_of":"80"},{"art_id":"3","amount_of":"10"}]},{"name":"Dinning Table","contain_articles":[{"art_id":"1","amount_of":"40"},{"art_id":"2","amount_of":"80"},{"art_id":"4","amount_of":"10"}]}]}' http://127.0.0.1:5000/api/v1/resources/products/update
+curl -i -H "Content-Type: application/json" -X DELETE -d '{"products":[{"name":"Dining Chair","contain_articles":[{"art_id":"1","amount_of":"40"},{"art_id":"2","amount_of":"80"},{"art_id":"3","amount_of":"10"}]},{"name":"Dinning Table","contain_articles":[{"art_id":"1","amount_of":"40"},{"art_id":"2","amount_of":"80"},{"art_id":"4","amount_of":"10"}]}]}' http://127.0.0.1:5000/api/v1/resources/products/delete
+
+curl -i -H "Content-Type: application/json" -X POST -d '{"inventory":[{"art_id":"1","name":"leg","stock":"120"},{"art_id":"2","name":"screw","stock":"170"},{"art_id":"3","name":"seat","stock":"200"},{"art_id":"4","name":"table top","stock":"100"}]}' http://127.0.0.1:5000/api/v1/resources/inventory/update
+curl -i -H "Content-Type: application/json" -X DELETE -d '{"inventory":[{"art_id":"1","name":"leg","stock":"120"},{"art_id":"2","name":"screw","stock":"170"},{"art_id":"3","name":"seat","stock":"200"},{"art_id":"4","name":"table top","stock":"100"}]}' http://127.0.0.1:5000/api/v1/resources/inventory/delete
+	
